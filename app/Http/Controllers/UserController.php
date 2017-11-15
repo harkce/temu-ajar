@@ -30,4 +30,18 @@ class UserController extends MainController
     	}
     	return $this->jsonResponse('success', 'Registration success', null);
     }
+
+    public function login(Request $request) {
+    	$input = $request->all();
+    	$user = User::where('email', $input['email'])->first();
+    	if (!$user) {
+    		return $this->jsonResponse('error', 'User not registered', null);
+    	}
+    	$check = \Hash::check($input['password'], $user->password);
+    	if ($check) {
+    		return $this->jsonResponse('success', null, $user);
+    	} else {
+    		return $this->jsonResponse('error', 'Incorrect password');
+    	}
+    }
 }
