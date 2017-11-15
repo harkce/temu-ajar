@@ -16,6 +16,10 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'api'], function() {
+	// auth
 	Route::post('register', 'UserController@register');
 	Route::post('login', 'UserController@login');
+
+	// get budget
+	Route::get('budget', 'BudgetController@get');
 });
