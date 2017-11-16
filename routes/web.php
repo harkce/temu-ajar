@@ -22,4 +22,7 @@ Route::group(['prefix' => 'api'], function() {
 
 	// get budget
 	Route::get('budget', 'BudgetController@get');
+
+	// thread
+	Route::post('thread', 'ThreadController@create');
 });
