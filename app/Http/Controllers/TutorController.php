@@ -24,4 +24,16 @@ class TutorController extends MainController
     	$user->save();
     	return $this->jsonResponse('success', 'Success become tutor');
     }
+
+    public function getProfile($id) {
+    	$user = User::where('id', $id)
+    		->where('is_tutor', true)
+    		->first();
+    	if (!$user) {
+    		return $this->jsonResponse('error', 'User not found');
+    	}
+    	$tutor = Tutor::find($id);
+    	$user->skills = $tutor->skills;
+    	return $this->jsonResponse('success', null, $user);
+    }
 }

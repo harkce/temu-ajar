@@ -34,4 +34,5 @@ Route::group(['prefix' => 'api'], function() {
 
 	// become tutor
 	Route::post('tutor/new', 'TutorController@becomeTutor');
+	Route::get('tutor/{id}', 'TutorController@getProfile');
 });
