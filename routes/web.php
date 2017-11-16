@@ -25,4 +25,5 @@ Route::group(['prefix' => 'api'], function() {
 
 	// thread
 	Route::post('thread', 'ThreadController@create');
+	Route::get('thread/user/{id}', 'ThreadController@getAllByUser');
 });

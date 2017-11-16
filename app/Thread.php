@@ -9,6 +9,6 @@ class Thread extends Model
     public $timestamps = false;
 
     public function budget() {
-    	return $this->belongsTo('App\Budget');
+    	return $this->belongsTo('App\Budget', 'id');
     }
 }

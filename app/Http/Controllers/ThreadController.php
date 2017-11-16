@@ -26,4 +26,14 @@ class ThreadController extends MainController
     	$thread->time = date('D, j F Y', strtotime($thread->time));
     	return $this->jsonResponse('success', 'Success create thread', $thread);
     }
+
+    public function getAllByUser($id) {
+    	$threads = Thread::where('user_id', $id)
+	    	->join('budgets', 'threads.budget_range', '=', 'budgets.id')
+	    	->get();
+    	foreach ($threads as $thread) {
+    		$thread->time = date('D, j F Y', strtotime($thread->time));
+    	}
+    	return $this->jsonResponse('success', null, $threads);
+    }
 }
