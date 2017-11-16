@@ -22,9 +22,12 @@ class ThreadController extends MainController
     	$thread->user_id = $input['user_id'];
     	$thread->save();
 
-    	$thread = Thread::with('budget')->find($thread->id)
-    		->join('budgets', 'threads.budget_range', '=', 'budgets.id')
+    	$thread = Thread::with('budget')
+    		->where('threads.id', $thread->id)
 	    	->first();
+    	$budget = $thread->budget->budget;
+    	unset($thread->budget);
+    	$thread->budget = $budget;
     	$thread->time = date('D, j F Y', strtotime($thread->time));
     	return $this->jsonResponse('success', 'Success create thread', $thread);
     }
@@ -46,9 +49,12 @@ class ThreadController extends MainController
     	$thread->budget_range = $input['budget_range'];
     	$thread->save();
 
-    	$thread = Thread::with('budget')->find($thread->id)
-    		->join('budgets', 'threads.budget_range', '=', 'budgets.id')
+    	$thread = Thread::with('budget')
+    		->where('threads.id', $thread->id)
 	    	->first();
+    	$budget = $thread->budget->budget;
+    	unset($thread->budget);
+    	$thread->budget = $budget;
     	$thread->time = date('D, j F Y', strtotime($thread->time));
     	return $this->jsonResponse('success', 'Success update thread', $thread);
     }
@@ -66,32 +72,45 @@ class ThreadController extends MainController
     }
 
     public function getAllByUser($id) {
-    	$threads = Thread::where('user_id', $id)
-	    	->join('budgets', 'threads.budget_range', '=', 'budgets.id')
+    	$threads = Thread::where('state', '<>', 9)
+    		->where('user_id', $id)
+	    	->with('budget')
 	    	->get();
     	foreach ($threads as $thread) {
     		$thread->time = date('D, j F Y', strtotime($thread->time));
+    		$budget = $thread->budget->budget;
+	    	unset($thread->budget);
+	    	$thread->budget = $budget;
     	}
     	return $this->jsonResponse('success', null, $threads);
     }
 
     public function getAllExceptUser($id) {
-    	$threads = Thread::where('user_id', '<>' ,$id)
-	    	->join('budgets', 'threads.budget_range', '=', 'budgets.id')
+    	$threads = Thread::where('state', '<>', 9)
+    		->where('user_id', '<>' ,$id)
+	    	->with('budget')
 	    	->get();
 	    foreach ($threads as $thread) {
     		$thread->time = date('D, j F Y', strtotime($thread->time));
+    		$budget = $thread->budget->budget;
+	    	unset($thread->budget);
+	    	$thread->budget = $budget;
     	}
     	return $this->jsonResponse('success', null, $threads);
     }
 
     public function detail($id) {
-    	$thread = Thread::with('budget')->find($id)
-    		->join('budgets', 'threads.budget_range', '=', 'budgets.id')
+    	$thread = Thread::where('state', '<>', 9)
+    		->where('threads.id', $id)
+    		->with('budget')
 	    	->first();
     	if (!$thread) {
     		return $this->jsonResponse('error', 'No thread found');
     	}
+    	$budget = $thread->budget->budget;
+    	unset($thread->budget);
+    	$thread->budget = $budget;
+    	$thread->time = date('D, j F Y', strtotime($thread->time));
     	return $this->jsonResponse('success', null, $thread);
     }
 }
