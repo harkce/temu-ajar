@@ -22,7 +22,9 @@ class ThreadController extends MainController
     	$thread->user_id = $input['user_id'];
     	$thread->save();
 
-    	$thread = Thread::with('budget')->find($thread->id);
+    	$thread = Thread::with('budget')->find($thread->id)
+    		->join('budgets', 'threads.budget_range', '=', 'budgets.id')
+	    	->first();
     	$thread->time = date('D, j F Y', strtotime($thread->time));
     	return $this->jsonResponse('success', 'Success create thread', $thread);
     }
@@ -44,7 +46,9 @@ class ThreadController extends MainController
     	$thread->budget_range = $input['budget_range'];
     	$thread->save();
 
-    	$thread = Thread::with('budget')->find($thread->id);
+    	$thread = Thread::with('budget')->find($thread->id)
+    		->join('budgets', 'threads.budget_range', '=', 'budgets.id')
+	    	->first();
     	$thread->time = date('D, j F Y', strtotime($thread->time));
     	return $this->jsonResponse('success', 'Success update thread', $thread);
     }
