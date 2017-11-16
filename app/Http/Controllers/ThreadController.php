@@ -53,6 +53,18 @@ class ThreadController extends MainController
     	return $this->jsonResponse('success', 'Success update thread', $thread);
     }
 
+    public function delete(Request $request) {
+    	$input = $request->all();
+    	$thread = Thread::find($input['id']);
+    	if (!$thread) {
+    		return $this->jsonResponse('error', 'No thread found');
+    	}
+    	$thread->state = 9;
+    	$thread->save();
+
+    	return $this->jsonResponse('success', 'Success delete thread', $thread);
+    }
+
     public function getAllByUser($id) {
     	$threads = Thread::where('user_id', $id)
 	    	->join('budgets', 'threads.budget_range', '=', 'budgets.id')
