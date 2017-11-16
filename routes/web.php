@@ -28,4 +28,5 @@ Route::group(['prefix' => 'api'], function() {
 	Route::post('thread/edit', 'ThreadController@edit');
 	Route::get('thread/user/{id}', 'ThreadController@getAllByUser');
 	Route::get('thread/tutor/{id}', 'ThreadController@getAllExceptUser');
+	Route::get('thread/{id}', 'ThreadController@detail');
 });

@@ -68,4 +68,14 @@ class ThreadController extends MainController
     	}
     	return $this->jsonResponse('success', null, $threads);
     }
+
+    public function detail($id) {
+    	$thread = Thread::with('budget')->find($id)
+    		->join('budgets', 'threads.budget_range', '=', 'budgets.id')
+	    	->first();
+    	if (!$thread) {
+    		return $this->jsonResponse('error', 'No thread found');
+    	}
+    	return $this->jsonResponse('success', null, $thread);
+    }
 }
