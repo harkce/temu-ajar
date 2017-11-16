@@ -31,4 +31,7 @@ Route::group(['prefix' => 'api'], function() {
 	Route::get('thread/user/{id}', 'ThreadController@getAllByUser');
 	Route::get('thread/tutor/{id}', 'ThreadController@getAllExceptUser');
 	Route::get('thread/{id}', 'ThreadController@detail');
+
+	// become tutor
+	Route::post('tutor/new', 'TutorController@becomeTutor');
 });
